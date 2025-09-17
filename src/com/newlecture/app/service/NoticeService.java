@@ -18,15 +18,21 @@ public class NoticeService {
 	private String password = "doitmysql";
 	private String driver = "com.mysql.cj.jdbc.Driver";
 	
-	public List<Notice> getList() throws ClassNotFoundException, SQLException{
+	public List<Notice> getList(int page) throws ClassNotFoundException, SQLException{
 		
-		String sql = "SELECT * FROM NOTICE";
+		int start = 1 + (page-1)*1;  //등차수열 3
+		int end = 2 * page;           
+		
+		String sql = "select * FROM notice_view "+
+					 "LIMIT ?, ?";
 		
 				
 		Class.forName(driver);
 		Connection con = DriverManager.getConnection(url,uid,password);
-		Statement st = con.createStatement();
-		ResultSet rs = st.executeQuery(sql);
+		PreparedStatement st = con.prepareStatement(sql);
+		st.setInt(1, start);
+		st.setInt(2, end);
+		ResultSet rs = st.executeQuery();
 		
 		List<Notice> list = new ArrayList<Notice>();
 		
@@ -45,7 +51,7 @@ public class NoticeService {
 									title,
 									writer_id,
 									content,
-									refdate,
+									refdate, 
 									hit,
 									files
 						);

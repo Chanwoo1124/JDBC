@@ -2,6 +2,7 @@ package com.newlecture.app.console;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Scanner;
 
 import com.newlecture.app.entity.Notice;
 import com.newlecture.app.service.NoticeService;
@@ -9,15 +10,16 @@ import com.newlecture.app.service.NoticeService;
 
 public class NoticeConsole {
 	private NoticeService service;
-	
+	private int page;
 	
 	public NoticeConsole(){
 		service = new NoticeService();
+		page = 1;
 	}
 	
 	
 	public void printNoticeList() throws ClassNotFoundException, SQLException {
-		List<Notice> list = service.getList();
+		List<Notice> list = service.getList(page);
 		System.out.println("------------------------------");
 		System.out.printf("<공지사항> 총 %d 게시글\n", 12);
 		System.out.println("------------------------------");
@@ -31,8 +33,31 @@ public class NoticeConsole {
 	}
 
 	public int inputNoticeMenu() {
+		Scanner scan = new Scanner(System.in);
 		
-		return 0;
+		System.out.print("1.상세조회/ 2.이전/ 3.다음/ 4.글쓰기/ 5.종료>" );
+		String menu_ = scan.nextLine();
+		
+		int menu = Integer.parseInt(menu_);
+		
+		
+	
+		return menu;
 	}
+
+
+	public void movePrevList() {
+		if(page == 1) {
+			System.out.println("이전 페이지가 없습니다");
+			return;
+		}
+		page --;
+		
+	}
+	public void moveNextList() {
+		page ++;
+	}
+
+
 
 }
